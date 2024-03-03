@@ -1,3 +1,5 @@
+import os
+import argparse
 import time
 import unittest
 from selenium import webdriver
@@ -7,10 +9,17 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 class TestCases(unittest.TestCase):
-    department = "Research & Development"
-    language = "English"
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--department', default="Research & Development", type=str)
+    parser.add_argument('-l', '--language', default="English", type=str)
+    parser.add_argument('-v', '--vacancies', default=14, type=int)
+    args = parser.parse_args()
 
     def test_vacancies(self):
+
+        self.department = self.args.department
+        self.language = self.args.language
+        self.vacancies = self.args.vacancies
 
         self.driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
@@ -40,15 +49,16 @@ class TestCases(unittest.TestCase):
 
         self.driver.get(self.driver.current_url + self.language)
 
-        vacancies = int(self.driver.find_element(
-            By.XPATH, "//*[@id=\"root\"]/div/div[1]/div/h3/span").text)
+        # vacancies = int(self.driver.find_element(
+        #     By.XPATH, "//*[@id=\"root\"]/div/div[1]/div/h3/span").text)
 
         list_of_vacancies = self.driver.find_elements(
             By.XPATH, "//*[@id=\"root\"]/div/div[1]/div/div/div[2]/div/*")
 
         time.sleep(2)
         self.driver.close()
-        self.assertEqual(vacancies, len(list_of_vacancies))
+        self.assertEqual(self.vacancies, len(list_of_vacancies))
+        print("Test Executed Successfully")
 
 
 if __name__ == '__main__':
