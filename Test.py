@@ -11,7 +11,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 class TestCases(unittest.TestCase):
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--department', default="Research & Development", type=str)
-    parser.add_argument('-l', '--language', default="English", type=str)
     parser.add_argument('-v', '--vacancies', default=14, type=int)
     args = parser.parse_args()
 
@@ -44,13 +43,6 @@ class TestCases(unittest.TestCase):
 
         self.assertIsNotNone(department_element)
         department_element.click()
-
-        time.sleep(1)
-
-        self.driver.get(self.driver.current_url + self.language)
-
-        # vacancies = int(self.driver.find_element(
-        #     By.XPATH, "//*[@id=\"root\"]/div/div[1]/div/h3/span").text)
 
         list_of_vacancies = self.driver.find_elements(
             By.XPATH, "//*[@id=\"root\"]/div/div[1]/div/div/div[2]/div/*")
